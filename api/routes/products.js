@@ -11,8 +11,14 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
+
+    const product = {
+        name: req.body.name,
+        price: req.body.price
+    };
     res.status(200).json({
-        msg: 'data 등록됨.'
+        msg: 'data 등록됨.',
+        createProduct: product
     });
 });
 
