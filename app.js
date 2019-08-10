@@ -1,12 +1,13 @@
 const express = require('express');
 const app = express();
+const morgan = require('morgan');
 
 const http = require('http');
 
 const productRoutes = require('./api/routes/products');
 const orderRoutes = require('./api/routes/oders');
 
-
+app.use(morgan('dev'));
 
 app.use('/products', productRoutes);
 app.use('/orders', orderRoutes);
