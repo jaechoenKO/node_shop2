@@ -3,11 +3,13 @@ const app = express();
 
 const http = require('http');
 
-app.use((req, res) => {
-    res.status(200).json({
-        message: 'It works!'
-    });
-});
+const productRoutes = require('./api/routes/products');
+const orderRoutes = require('./api/routes/oders');
+
+
+
+app.use('/products', productRoutes);
+app.use('/orders', orderRoutes);
 
 const PORT = 3000;
 
