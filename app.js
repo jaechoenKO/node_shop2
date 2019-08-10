@@ -3,10 +3,17 @@ const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const http = require('http');
-
+const mongoose = require('mongoose');
 
 const productRoutes = require('./api/routes/products');
 const orderRoutes = require('./api/routes/oders');
+
+
+const db = "mongodb+srv://jaecheon:epffl0128!@cluster0-1fqcl.mongodb.net/test?retryWrites=true&w=majority";
+
+mongoose.connect(db, {useNewUrlParser: true, useCreateIndex: true})
+    .then(() => console.log("MongoDB Connected..."))
+    .catch(err => console.log(err));
 
 app.use(morgan('dev'));
 
