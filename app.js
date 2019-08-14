@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 
 const productRoutes = require('./api/routes/products');
 const orderRoutes = require('./api/routes/oders');
-
+const userRoutes = require('./api/routes/user');
 
 const db = "mongodb+srv://jaecheon:epffl0128!@cluster0-1fqcl.mongodb.net/test?retryWrites=true&w=majority";
 
@@ -20,8 +20,11 @@ app.use(morgan('dev'));
 // 사용자 입력을 보기 편하게 보기 위함.
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+
+// 라우팅 경로 지정 접근
 app.use('/products', productRoutes);
 app.use('/orders', orderRoutes);
+app.use('/user', userRoutes);
 
 const PORT = 3000;
 
