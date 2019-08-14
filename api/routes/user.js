@@ -78,14 +78,31 @@ router.post('/register', (req, res) => {
 });
 
 
+router.delete('/:userId', (req, res) => {
 
+    const id = req.params.userId;
 
+    UserModel
+        .remove({_id: id})
+        .exec()
+        .then(user => {
+            if (!user) {
+                res.status(404).json({
+                    msg: "not found user"
+                });
+            } else {
+                res.status(200).json({
+                    msg: "delete user"
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
 
-
-
-
-
-
+});
 
 
 
