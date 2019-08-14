@@ -83,10 +83,40 @@ router.get('/:productId', (req, res) => {
     // });
 })
 
-router.patch('/', (req, res) => {
-    res.status(200).json({
-        msg: 'data 수정됨.'
-    });
+router.patch('/:productId', (req, res) => {
+
+    const id = req.params.productId;
+    // 어느 값을 변경할지 모르니 빈 객체를 만들어놈.
+    const updateOps = {};
+    for (const ops of req.body){
+        // 수정된 내용을 updateOps에 넣어줌.
+        updateOps[ops.propName] = ops.value;
+    }
+    productModel
+        // 아이디와 변경될 값.
+        .update({_id: id}, {$set: updateOps})
+        .exec()
+        .then(doc => {
+            if (!doc) {
+                return res.status(404).json({
+                    msg: "fail update data"
+                });
+            } else {
+                res.status(200).json({
+                    msg: "success update data",
+                    updateData: doc
+                });
+            }
+        })
+        .catch(err => {
+            res.status(404).json({
+                error: err
+            });
+        });
+
+    // res.status(200).json({
+    //     msg: 'data 수정됨.'
+    // });
 });
 
 router.delete('/:productsId', (req, res) => {
