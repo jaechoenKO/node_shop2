@@ -49,9 +49,39 @@ router.post('/', (req, res) => {
                 error: err
             });
         });
-
-
 });
+
+// :productId 세미콜론을 제외하면 그냥 url이 된다. 
+router.get('/:productId', (req, res) => {
+    
+    // url 주소를 받아 올 떄는 params. 브라우저에서 값일 때는 body
+    const id = req.params.productId;
+
+    productModel
+        .findById(id)
+        .exec()
+        .then(doc => {
+            if (doc) {
+                return res.status(200).json({
+                    msg: "success full detail product",
+                    productInfo: doc
+                });
+            } else {
+                res
+                    .status(404)
+                    .json({msg: "No valid entry fount"});
+            }
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
+
+    // res.status(201).json({
+        
+    // });
+})
 
 router.patch('/', (req, res) => {
     res.status(200).json({
