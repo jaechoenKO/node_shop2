@@ -113,10 +113,6 @@ router.patch('/:productId', (req, res) => {
                 error: err
             });
         });
-
-    // res.status(200).json({
-    //     msg: 'data 수정됨.'
-    // });
 });
 
 router.delete('/:productsId', (req, res) => {
@@ -143,19 +139,7 @@ router.delete('/:productsId', (req, res) => {
                 error: err
             });
         });
-    
-    // res.status(200).json({
-    //     msg: 'data 삭제됨.'
-    // });
 });
-
-
-
-
-
-
-
-
 
 
 
