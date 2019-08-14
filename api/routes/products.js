@@ -89,10 +89,34 @@ router.patch('/', (req, res) => {
     });
 });
 
-router.delete('/', (req, res) => {
-    res.status(200).json({
-        msg: 'data 삭제됨.'
-    });
+router.delete('/:productsId', (req, res) => {
+    
+    const id = req.params.productsId;
+
+    productModel
+        .remove({_id: id})
+        .exec()
+        .then(doc => {
+            if (!doc) {
+                res.status(404)
+                    .json({
+                        msg: "fail remove productId"
+                    });
+            } else {
+                res.status(200).json({
+                    msg: "delete remove productId"
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
+    
+    // res.status(200).json({
+    //     msg: 'data 삭제됨.'
+    // });
 });
 
 
