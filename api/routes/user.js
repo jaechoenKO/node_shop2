@@ -6,6 +6,7 @@ const bcrypt = require('bcryptjs');
 
 const UserModel = require('../models/user');
 
+// 전체 유저 찾기
 router.get('/all', (req, res) => {
 
     UserModel
@@ -25,6 +26,33 @@ router.get('/all', (req, res) => {
 
 });
 
+// 단일 유저 찾기
+router.get('/:userId', (req, res) => {
+
+    const id = req.params.userId;
+
+    UserModel
+        .findById(id)
+        .exec()
+        .then(result => {
+            if (!result) {
+                return res.status(404).json({
+                    msg: "not found userId"
+                });
+            } else {
+                res.status(200).json({
+                    msg: "success found userId",
+                    user: result
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
+
+});
 
 // 유저 등록 url : localhost:3000/user/register
 router.post('/register', (req, res) => {
@@ -77,6 +105,7 @@ router.post('/register', (req, res) => {
         });
 });
 
+// 유저 수정
 router.patch('/:userId', (req, res) => {
     const id = req.params.userId;
     const updateOps = {};
@@ -131,10 +160,6 @@ router.delete('/:userId', (req, res) => {
         });
 
 });
-
-
-
-
 
 
 
