@@ -77,6 +77,34 @@ router.post('/register', (req, res) => {
         });
 });
 
+router.patch('/:userId', (req, res) => {
+    const id = req.params.userId;
+    const updateOps = {};
+    for(const ops of req.body) {
+        updateOps[ops.propName] = ops.value;
+    }
+
+    UserModel
+        .update({_id: id}, {$set: updateOps})
+        .exec()
+        .then(doc => {
+            if (!doc) {
+                return res.status(404).json({
+                    msg: "fail update data"
+                });
+            } else {
+                res.status(200).json({
+                    msg: "success update data",
+                    updateData: doc
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
+});
 
 router.delete('/:userId', (req, res) => {
 
