@@ -3,6 +3,7 @@ const router = express.Router();
 const OrderModel = require('../models/order');
 const ProductModel = require('../models/product');
 const mongoose = require('mongoose');
+const checkAuth = require('../middleware/check-auth');
 
 router.get('/', (req, res) => {
     OrderModel
@@ -21,7 +22,7 @@ router.get('/', (req, res) => {
         });
 });
 
-router.post('/', (req, res) => {
+router.post('/', checkAuth, (req, res) => {
 
     ProductModel
         .findById(req.body.productId)
@@ -55,7 +56,7 @@ router.post('/', (req, res) => {
     
 });
 
-router.get('/:orderId', (req, res) => {
+router.get('/:orderId', checkAuth, (req, res) => {
     const id = req.params.orderId;
     
     OrderModel
@@ -83,13 +84,37 @@ router.get('/:orderId', (req, res) => {
 /**
  * 수정하기 update
  */
-router.patch('/', (req, res) => {
-    res.status(200).json({
-        msg: 'data 수정됨.'
-    });
+router.patch('/', checkAuth, (req, res) => {
+
+    const id = req.params.orderId;
+    const updateOps = {};
+    for (const ops of req.body) {
+        updateOps[ops.propName] = ops.value;
+    }
+
+    OrderModel
+        .update({_id: id}, {$set: updateOps})
+        .exec()
+        .then(doc => {
+            if (!doc) {
+                return res.status(404).json({
+                    msg: "not found orderId"
+                });
+            } else {
+                res.status(200).json({
+                    msg: "successful ",
+                    updateOps: doc
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
 });
 
-router.delete('/:orderId', (req, res) => {
+router.delete('/:orderId', checkAuth, (req, res) => {
 
     const id = req.params.orderId;
     

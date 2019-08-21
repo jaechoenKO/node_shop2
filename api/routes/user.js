@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 // 암호화 하기 위한 라이브러리
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const checkAuth = require('../middleware/check-auth');
 
 const UserModel = require('../models/user');
 
@@ -107,7 +108,7 @@ router.post('/register', (req, res) => {
 });
 
 // 유저 수정
-router.patch('/:userId', (req, res) => {
+router.patch('/:userId', checkAuth, (req, res) => {
     const id = req.params.userId;
     const updateOps = {};
     for(const ops of req.body) {
@@ -136,7 +137,7 @@ router.patch('/:userId', (req, res) => {
         });
 });
 
-router.delete('/:userId', (req, res) => {
+router.delete('/:userId', checkAuth, (req, res) => {
 
     const id = req.params.userId;
 
@@ -165,8 +166,6 @@ router.delete('/:userId', (req, res) => {
 
 // 로그인
 router.post('/login', (req, res) => {
-
-
 
     UserModel
         // 사용자 입력 이메일값 확인
@@ -197,7 +196,7 @@ router.post('/login', (req, res) => {
             
                 return res.status(200).json({
                     msg: "successful Auth",
-                    token: token
+                    token: "Bearer " + token
                 });
             }
         

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const productModel = require('../models/product');
-
+const checkAuth = require('../middleware/check-auth'); // 토큰 검증 모듈
 
 // 전체 데이터 불러오기.
 router.get('/', (req, res) => {
@@ -25,9 +25,8 @@ router.get('/', (req, res) => {
         });
 });
 
-
 // product data 등록.
-router.post('/', (req, res) => {
+router.post('/', checkAuth, (req, res) => {
 
     const product = new productModel({
         _id: new mongoose.Types.ObjectId(),
@@ -40,7 +39,7 @@ router.post('/', (req, res) => {
         .then(result => {
             console.log(result);
             res.status(201).json({
-                msg: "successfull product Post",
+                msg: "successful product Post",
                 createProduct: result
             });
         })
@@ -83,7 +82,7 @@ router.get('/:productId', (req, res) => {
     // });
 })
 
-router.patch('/:productId', (req, res) => {
+router.patch('/:productId', checkAuth, (req, res) => {
 
     const id = req.params.productId;
     // 어느 값을 변경할지 모르니 빈 객체를 만들어놈.
@@ -115,7 +114,7 @@ router.patch('/:productId', (req, res) => {
         });
 });
 
-router.delete('/:productsId', (req, res) => {
+router.delete('/:productsId', checkAuth, (req, res) => {
     
     const id = req.params.productsId;
 
