@@ -9,7 +9,9 @@ const productRoutes = require('./api/routes/products');
 const orderRoutes = require('./api/routes/oders');
 const userRoutes = require('./api/routes/user');
 
-const db = "mongodb+srv://jaecheon:epffl0128!@cluster0-1fqcl.mongodb.net/test?retryWrites=true&w=majority";
+// const db = "mongodb+srv://jaecheon:epffl0128!@cluster0-1fqcl.mongodb.net/test?retryWrites=true&w=majority";
+
+const db = "mongodb://teddykwak:k9915402@ds141294.mlab.com:41294/node-rest-shop";
 
 mongoose.connect(db, {useNewUrlParser: true, useCreateIndex: true})
     .then(() => console.log("MongoDB Connected..."))

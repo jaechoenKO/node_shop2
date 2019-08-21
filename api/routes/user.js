@@ -3,6 +3,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 // 암호화 하기 위한 라이브러리
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const UserModel = require('../models/user');
 
@@ -161,6 +162,54 @@ router.delete('/:userId', (req, res) => {
 
 });
 
+
+// 로그인
+router.post('/login', (req, res) => {
+
+
+
+    UserModel
+        // 사용자 입력 이메일값 확인
+        .find({email: req.body.email})
+        .exec()
+        .then(user => {
+            if (!user) {
+                res.status(404).json({
+                    msg: "not found user"
+                });
+            }
+            bcrypt.compare(req.body.password, user[0].password, (err, result) => {
+                if (err) {
+                    return res.status(401).json({
+                        msg: "not match password"
+                    });
+                }
+                // 토큰 생성
+                if (result) {
+                    // 토큰 생성은 sign으로 한다.
+                    const token = jwt.sign({
+                        email: user[0].email,
+                        userId: user[0]._id
+                    },
+                        // 토큰 유지 시간 expiresIn 1h 1시간, 1m 1분, 1s 1초 (1000/1)이니 1초는 1000초
+                        "secret", { expiresIn: "1h" }
+                    );
+            
+                return res.status(200).json({
+                    msg: "successful Auth",
+                    token: token
+                });
+            }
+        
+            });
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
+
+});
 
 
 module.exports = router;
